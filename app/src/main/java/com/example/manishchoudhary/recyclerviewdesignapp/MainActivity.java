@@ -1,14 +1,13 @@
 package com.example.manishchoudhary.recyclerviewdesignapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +48,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         prepareAlbums();
+
+        ItemClickSupport.addTo(recyclerView)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Album tempObject = albumList.get(position);
+                        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                        intent.putExtra("Album Name",tempObject.getName());
+                        intent.putExtra("Number of Songs",tempObject.getNumOfSongs());
+                        intent.putExtra("ThumbnailURL",tempObject.getThumbnail());
+                        startActivity(intent);
+                    }
+                });
 
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
